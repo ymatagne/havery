@@ -1,0 +1,14 @@
+{{range $dir := lsdir "/havery"}}
+  {{$cutdir := printf "/havery/%s" $dir}}
+  {{$hostname := getv (printf "%s/HostName" $cutdir) }}
+  {{$ip := getv (printf "%s/HostIp" $cutdir) }}
+  {{if exists (printf "%s/HostSshPort" $cutdir)}}
+    {{$port := getv (printf "%s/HostSshPort" $cutdir) }}
+    {{ if $port }}
+listen {{$hostname}}_ssh :10022
+  mode tcp
+  option tcplog
+  server node {{$ip }}:{{$port}}
+    {{end}}
+  {{end}}
+{{end}}

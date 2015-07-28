@@ -1,0 +1,7 @@
+[template]
+src = "haproxy.cfg.tmpl"
+dest = "/etc/haproxy/haproxy.cfg"
+keys = [
+        "/havery"
+]
+reload_cmd = "haproxy -f /etc/haproxy/haproxy.cfg -f /etc/haproxy/haproxy-http.cfg -f /etc/haproxy/haproxy-ssh.cfg -p /var/run/haproxy.pid -sf $(cat /var/run/haproxy.pid)"

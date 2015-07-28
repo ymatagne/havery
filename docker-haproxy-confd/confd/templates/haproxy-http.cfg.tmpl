@@ -1,0 +1,22 @@
+frontend http  
+ bind *:80 
+    {{range $dir := lsdir "/havery"}}
+    {{$cutdir := printf "/havery/%s" $dir}}
+    {{$hostname := getv (printf "%s/HostName" $cutdir) }}
+ acl {{$hostname}} hdr(host) -i {{$hostname}}
+ use_backend {{$hostname}} if {{$hostname}}
+  {{end}}
+
+
+{{range $dir := lsdir "/havery"}}
+  {{$cutdir := printf "/havery/%s" $dir}}
+  {{$hostname := getv (printf "%s/HostName" $cutdir) }}
+  {{$ip := getv (printf "%s/HostIp" $cutdir) }}
+  {{$port := getv (printf "%s/HostHttpPort" $cutdir) }}
+backend {{$hostname}}
+  http-request set-header Host {{$hostname}}
+  server node {{$ip}}:{{$port}}
+ 
+{{end}}
+
+
